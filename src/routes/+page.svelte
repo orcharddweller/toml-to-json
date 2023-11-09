@@ -7,12 +7,16 @@
 	let tomlText = '';
 	let jsonText = '';
 
+	let errorMessage: string | null = null;
+
 	$: {
 		let parsed;
 		try {
 			parsed = toml.parse(tomlText, { bigint: false });
-		} catch (e) {
-			console.error(e);
+			errorMessage = null;
+		} catch (e: unknown) {
+			if (!(e instanceof Error)) throw e;
+			errorMessage = e.message;
 		}
 		if (parsed !== undefined) {
 			jsonText = JSON.stringify(parsed, null, 2);
@@ -29,6 +33,7 @@
 		<div class="flex-1">
 			<h2 class="text-3xl font-semibold">TOML</h2>
 			<TomlEditor class="border border-slate-400 h-full" bind:doc={tomlText} />
+			<div class="text-red-700">{errorMessage ?? ''}</div>
 		</div>
 		<!--Button for potential reverse-mode-->
 		<button
