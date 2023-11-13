@@ -12,7 +12,7 @@
 	$: {
 		let parsed;
 		try {
-			parsed = toml.parse(tomlText, { bigint: false });
+			parsed = toml.parse(tomlText, { bigint: false, joiner: '\n' });
 			errorMessage = null;
 		} catch (e: unknown) {
 			if (!(e instanceof Error)) throw e;
